@@ -1,5 +1,5 @@
 import { LCSaveType } from "@/components/save-file-editor";
-import { decrypt, encrypt } from "@/lib/crypto";
+import { encrypt } from "@/lib/crypto";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {

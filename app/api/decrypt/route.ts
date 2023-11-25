@@ -10,15 +10,17 @@ export async function POST(request: NextRequest) {
       message: "No file provided or file is not a Blob.",
     });
   }
-
-  const bytes = await file.arrayBuffer();
-  const buffer = Buffer.from(bytes);
-
   try {
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+
     const decrypted = decrypt(buffer);
     return NextResponse.json({ success: true, decrypted });
   } catch (err) {
     console.error(err);
-    return NextResponse.json({ success: false, message: "Decryption failed." });
+    return NextResponse.json({
+      success: false,
+      error: "Failed. Probably not a save file.",
+    });
   }
 }

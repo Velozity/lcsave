@@ -1,11 +1,7 @@
 "use client";
 import styles from "./page.module.css";
 import { useEffect, useRef, useState } from "react";
-import {
-  LCSaveType,
-  SaveFileEditor,
-  Vector3,
-} from "../components/save-file-editor";
+import { LCSaveType, SaveFileEditor } from "../components/save-file-editor";
 
 export default function Home() {
   const [file, setFile] = useState<File>();
@@ -57,7 +53,10 @@ export default function Home() {
       setOriginalSave(JSON.parse(res.decrypted));
       setSaveName(file.name);
     } else {
-      alert(res.error || res);
+      alert(
+        res.error ||
+          "Something went wrong, make sure you are uploading a valid save file."
+      );
     }
   };
 
