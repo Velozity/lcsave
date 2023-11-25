@@ -7,38 +7,35 @@ import {
   Vector3,
 } from "../components/save-file-editor";
 
-function checkIfAnyPosExactlyEqual(shipGrabbableItemPos: {
-  value: Vector3[];
-}): boolean {
-  const positions = shipGrabbableItemPos.value;
-
-  for (let i = 0; i < positions.length; i++) {
-    for (let j = i + 1; j < positions.length; j++) {
-      if (
-        positions[i].x === positions[j].x &&
-        positions[i].y === positions[j].y &&
-        positions[i].z === positions[j].z
-      ) {
-        return true; // Found two positions that are exactly equal
-      }
-    }
-  }
-
-  return false; // No two positions are exactly equal
-}
-
 export default function Home() {
   const [file, setFile] = useState<File>();
   const [saveName, setSaveName] = useState("");
   const [save, setSave] = useState<LCSaveType>();
   const [originalSave, setOriginalSave] = useState<LCSaveType>();
   const hiddenFileInput = useRef<HTMLInputElement>(null);
+  const [dragOver, setDragOver] = useState(false);
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       setFile(e.target.files[0]);
     }
   };
+  const handleDragOver = (e: any) => {
+    e.preventDefault();
+    setDragOver(true);
+  };
 
+  const handleDragLeave = (e: any) => {
+    e.preventDefault();
+    setDragOver(false);
+  };
+  const handleDrop = (e: any) => {
+    e.preventDefault();
+    setDragOver(false);
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      setFile(file);
+    }
+  };
   useEffect(() => {
     if (file) {
       handleUpload();
@@ -120,21 +117,43 @@ export default function Home() {
 
   return (
     <main className={styles.main}>
+      {save && (
+        <div
+          className="absolute top-[40px] right-[35px] cursor-pointer hover:text-[grey]"
+          onClick={() => {
+            setSave(undefined);
+            setOriginalSave(undefined);
+            setFile(undefined);
+            setSaveName("");
+          }}
+        >
+          x
+        </div>
+      )}
       <div
         className={`card w-full ${
           !save ? "lg:w-5/12" : "lg:w-full"
         } md:w-full rounded-lg px-20 py-10 shadow-lg`}
       >
-        {save && (
+        {save ? (
           <h1 className="font-bold text-2xl mb-2">
+            Lethal Company Save Editor
+          </h1>
+        ) : (
+          <h1 className="font-bold text-2xl mb-4 text-center">
             Lethal Company Save Editor
           </h1>
         )}
         {!save && (
           <div>
             <div
-              className="w-full cursor-pointer hover:text-[#848484] h-24 flex justify-center border-dashed border-2 border-[#848484] items-center text-center"
+              className={`w-full cursor-pointer h-24 flex justify-center border-dashed border-2 border-[#848484] hover:border-[#848484] items-center text-center ${
+                dragOver ? "border-[#848484]" : "border-[#ccc]"
+              }`}
               onClick={handleFileInputClick}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
             >
               Drop or Upload LC Save File
             </div>
@@ -150,10 +169,14 @@ export default function Home() {
         )}
         {save && <SaveFileEditor save={save} setSave={setSave} />}
         <div className="mt-8 text-center">
-          <p className="mb-1 text-sm">
-            Game Version: {save?.FileGameVers.value}
-          </p>
-          {originalSave && (
+          {save && (
+            <p className="mb-1 text-sm">
+              File: {file?.name}
+              <br />
+              Game Version: {save?.FileGameVers.value}
+            </p>
+          )}
+          {originalSave && save && (
             <button
               className="px-4 py-2 bg-[#fff] text-black mr-4 hover:bg-[grey] hover:text-white"
               onClick={() => {
