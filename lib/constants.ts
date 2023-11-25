@@ -2,6 +2,18 @@ type SpawnableItemsType = {
   [key: string]: number;
 };
 
+export const Planets: SpawnableItemsType = {
+  Experimentation: 0,
+  Assurance: 1,
+  Vow: 2,
+  "Company Building": 3,
+  March: 4,
+  Rend: 5,
+  Dine: 6,
+  Offense: 7,
+  Titan: 8,
+};
+
 export const SpawnableItems: SpawnableItemsType = {
   Binoculars: 0,
   Boombox: 1,

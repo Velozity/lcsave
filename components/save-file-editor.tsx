@@ -1,4 +1,4 @@
-import { SpawnableItems } from "@/lib/constants";
+import { Planets, SpawnableItems } from "@/lib/constants";
 
 export type Vector3 = {
   x: number;
@@ -182,29 +182,50 @@ export function SaveFileEditor({
             case "int":
               return (
                 <div className="flex flex-col">
-                  <input
-                    name={key}
-                    type="number"
-                    className="text-black mb-2 w-fit"
-                    value={value as number}
-                    onChange={(e) => {
-                      setSave((save: any) => {
-                        return {
-                          ...save,
-                          [key]: {
-                            ...save[key],
-                            value: parseInt(e.target.value) || 0,
-                          },
-                        };
-                      });
-                    }}
-                  />
-                  {key === "CurrentPlanetID" && (
-                    <div className="text-sm mb-4 text-[grey]">
-                      0 - Experimentation, 1 - Assurance, 2 - Vow, 3 - Company
-                      Building, 4 - March, 5 - Rend, 6 - Dine, 7 - Offense, 8 -
-                      Titan
-                    </div>
+                  {key === "CurrentPlanetID" ? (
+                    <>
+                      <select
+                        value={value as number}
+                        className="text-black"
+                        onChange={(e) => {
+                          setSave((save: any) => {
+                            return {
+                              ...save,
+                              [key]: {
+                                ...save[key],
+                                value: parseInt(e.target.value) || 0,
+                              },
+                            };
+                          });
+                        }}
+                      >
+                        {Object.keys(Planets).map((k, i) => {
+                          return (
+                            <option key={`${key}_${i}`} value={Planets[k]}>
+                              {k}
+                            </option>
+                          );
+                        })}
+                      </select>
+                    </>
+                  ) : (
+                    <input
+                      name={key}
+                      type="number"
+                      className="text-black mb-2 w-fit"
+                      value={value as number}
+                      onChange={(e) => {
+                        setSave((save: any) => {
+                          return {
+                            ...save,
+                            [key]: {
+                              ...save[key],
+                              value: parseInt(e.target.value) || 0,
+                            },
+                          };
+                        });
+                      }}
+                    />
                   )}
                 </div>
               );
