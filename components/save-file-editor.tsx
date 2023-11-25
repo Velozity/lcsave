@@ -1,3 +1,5 @@
+import { SpawnableItems } from "@/lib/constants";
+
 export type Vector3 = {
   x: number;
   y: number;
@@ -60,6 +62,19 @@ export type LCSaveType = {
   GlobalTime: IntWithMeta;
   FileGameVers: IntWithMeta;
 };
+
+function findKeyFromValue(valueToFind: any, jsonObject: any) {
+  let foundKey = null;
+
+  for (let key in jsonObject) {
+    if (jsonObject[key] === valueToFind) {
+      foundKey = key;
+      break;
+    }
+  }
+
+  return foundKey || "Unknown";
+}
 export function SaveFileEditor({
   save,
   setSave,
@@ -100,9 +115,12 @@ export function SaveFileEditor({
           }
         };
 
-        const addToVector3Array = (key: keyof LCSaveType) => {
+        const addToVector3Array = (key: keyof LCSaveType, def?: Vector3) => {
           setSave((prevSave: any) => {
-            const newArray = [...prevSave[key].value, { x: 0, y: 0, z: 0 }];
+            const newArray = [
+              ...prevSave[key].value,
+              def || { x: 0, y: 0, z: 0 },
+            ];
             return {
               ...prevSave,
               [key]: { ...prevSave[key], value: newArray },
@@ -192,7 +210,6 @@ export function SaveFileEditor({
               );
             case "System.Int32[],mscorlib":
               if (Array.isArray(value)) {
-                // Logic for rendering IntArrayWithMeta
                 return (
                   <>
                     {(value as number[]).map((val, idx) => (
@@ -200,37 +217,76 @@ export function SaveFileEditor({
                         key={`${idx}_${key}`}
                         className="flex items-center mr-2 mb-4"
                       >
-                        <input
-                          type="number"
-                          value={val as number}
-                          onChange={(e) => {
-                            handleIntArrayChange(key, [
-                              ...(value as number[]).slice(0, idx),
-                              parseInt(e.target.value),
-                              ...(value as number[]).slice(idx + 1),
-                            ]);
-                          }}
-                          className="text-black w-[5rem] px-2"
-                        />
-                        <button
-                          onClick={() => {
-                            if (key === "shipGrabbableItemIDs") {
-                              removeFromIntArray("shipGrabbableItemPos", idx);
-                            }
+                        {key === "shipGrabbableItemIDs" ? (
+                          <>
+                            <select
+                              value={val as number}
+                              className="text-black"
+                              onChange={(e) => {
+                                handleIntArrayChange(key, [
+                                  ...(value as number[]).slice(0, idx),
+                                  parseInt(e.target.value),
+                                  ...(value as number[]).slice(idx + 1),
+                                ]);
+                              }}
+                            >
+                              {Object.keys(SpawnableItems).map((k, i) => {
+                                return (
+                                  <option
+                                    key={`${idx}_${key}_${i}`}
+                                    value={SpawnableItems[k]}
+                                  >
+                                    {k}
+                                  </option>
+                                );
+                              })}
+                            </select>
+                            <button
+                              onClick={() => {
+                                removeFromIntArray("shipGrabbableItemPos", idx);
 
-                            removeFromIntArray(key, idx);
-                          }}
-                          className="text-white hover:text-[red] p-1 rounded-full h-5 w-5 flex items-center justify-center"
-                        >
-                          ×
-                        </button>
+                                removeFromIntArray(key, idx);
+                              }}
+                              className="text-white hover:text-[red] p-1 rounded-full h-5 w-5 flex items-center justify-center"
+                            >
+                              ×
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <input
+                              type="number"
+                              value={val as number}
+                              onChange={(e) => {
+                                handleIntArrayChange(key, [
+                                  ...(value as number[]).slice(0, idx),
+                                  parseInt(e.target.value),
+                                  ...(value as number[]).slice(idx + 1),
+                                ]);
+                              }}
+                              className="text-black w-[5rem] px-2"
+                            />
+                            <button
+                              onClick={() => {
+                                removeFromIntArray(key, idx);
+                              }}
+                              className="text-white hover:text-[red] p-1 rounded-full h-5 w-5 flex items-center justify-center"
+                            >
+                              ×
+                            </button>
+                          </>
+                        )}
                       </div>
                     ))}
                     <div>
                       <button
                         onClick={() => {
                           if (key === "shipGrabbableItemIDs") {
-                            addToVector3Array("shipGrabbableItemPos");
+                            addToVector3Array("shipGrabbableItemPos", {
+                              x: -4.92634,
+                              y: 0.676221848,
+                              z: -14.4751444,
+                            });
                           }
                           addToIntArray(key);
                         }}
@@ -260,8 +316,13 @@ export function SaveFileEditor({
                         className="flex flex-row w-full"
                       >
                         {key === "shipGrabbableItemPos" && (
-                          <div className="mr-2 w-[90px] text-[grey]">
-                            (Item: {save.shipGrabbableItemIDs.value[idx]})
+                          <div className="mr-2 w-full text-[grey]">
+                            (
+                            {findKeyFromValue(
+                              save.shipGrabbableItemIDs.value[idx],
+                              SpawnableItems
+                            )}
+                            )
                           </div>
                         )}
                         <input
