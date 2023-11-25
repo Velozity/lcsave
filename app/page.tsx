@@ -166,8 +166,17 @@ export default function Home() {
             />
           </div>
         )}
+        {!save && (
+          <p className="mb-1 text-sm text-center mt-4 text-[#B5B5B5]">
+            You can find your save files in:
+            <br />
+            <span className="italic">
+              %AppData%/LocalLow/ZeekerssRBLX/Lethal Company/LCSaveFile1
+            </span>
+          </p>
+        )}
         {save && <SaveFileEditor save={save} setSave={setSave} />}
-        <div className="mt-8 text-center">
+        <div className="mt-4 text-center">
           {save && (
             <p className="mb-1 text-sm">
               File: {file?.name}
