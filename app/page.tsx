@@ -146,7 +146,7 @@ export default function Home() {
         {!save && (
           <div>
             <div
-              className={`w-full cursor-pointer h-24 flex justify-center border-dashed border-2 border-[#848484] hover:border-[#848484] items-center text-center ${
+              className={`w-full cursor-pointer h-24 flex justify-center border-dashed border-2 border-[#848484] px-6 hover:border-[#848484] items-center text-center ${
                 dragOver ? "border-[#848484]" : "border-[#ccc]"
               }`}
               onClick={handleFileInputClick}
