@@ -1,4 +1,8 @@
-export const SpawnableItems = {
+type SpawnableItemsType = {
+  [key: string]: number;
+};
+
+export const SpawnableItems: SpawnableItemsType = {
   Binoculars: 0,
   Boombox: 1,
   Jetpack: 4,
