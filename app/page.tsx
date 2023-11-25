@@ -106,8 +106,12 @@ export default function Home() {
 
     if (res && res.success) {
       downloadBufferAsFile(Buffer.from(res.encrypted), saveName);
+    } else {
+      alert(
+        res.error ||
+          "An unexpected error occurred. Please double check your settings."
+      );
     }
-    console.log(res);
   };
 
   const handleFileInputClick = (event: any) => {
