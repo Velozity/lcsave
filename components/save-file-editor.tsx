@@ -83,7 +83,7 @@ export function SaveFileEditor({
           index: number,
           newValue: string
         ) => {
-          const newVector = newValue.split(",").map(Number);
+          const newVector = newValue.replace(/ /g, "").split(",").map(Number);
           if (newVector.length === 3) {
             setSave((prevSave: any) => {
               const newArray = [...prevSave[key].value];
@@ -255,7 +255,10 @@ export function SaveFileEditor({
                 <div>
                   {Array.isArray(value) &&
                     value.map((val: any, idx) => (
-                      <div key={`${idx}_${key}`} className="flex flex-row">
+                      <div
+                        key={`${idx}_${key}`}
+                        className="flex flex-row w-full"
+                      >
                         {key === "shipGrabbableItemPos" && (
                           <div className="mr-2 w-[90px] text-[grey]">
                             (Item: {save.shipGrabbableItemIDs.value[idx]})
@@ -267,7 +270,7 @@ export function SaveFileEditor({
                           onChange={(e) =>
                             handleVector3ArrayChange(key, idx, e.target.value)
                           }
-                          className="px-4 text-black text-left mb-3"
+                          className="px-2 flex flex-1 text-black text-left mb-3"
                         />
                         <button
                           onClick={() => {
@@ -317,7 +320,9 @@ export function SaveFileEditor({
                 type === "bool" ? "flex-row mb-2" : "flex-col mb-2"
               }`}
             >
-              <h3>{key}</h3>
+              <h3 className="mb-1">
+                {key} {key === "shipGrabbableItemPos" && "(X, Y, Z)"}
+              </h3>
               <div className="flex flex-wrap">{element}</div>
             </div>
           </div>
