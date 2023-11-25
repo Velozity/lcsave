@@ -98,15 +98,6 @@ export default function Home() {
     if (!save) return;
 
     // checks
-    if (checkIfAnyPosExactlyEqual(save.shipGrabbableItemPos)) {
-      if (
-        !confirm(
-          "WARNING: Items can get stuck and you won't be able to pick them up if they are in the exact same XYZ position. Continue?"
-        )
-      ) {
-        return;
-      }
-    }
     const data = new FormData();
     data.set("save", JSON.stringify(save));
 
