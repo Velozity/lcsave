@@ -239,6 +239,12 @@ export function SaveFileEditor({
                         +
                       </button>
                     </div>
+                    {key === "shipGrabbableItemIDs" && (
+                      <div className="w-full text-sm mb-3 text-[grey]">
+                        Be sure to add the corresponding position for any new
+                        items you create below :)
+                      </div>
+                    )}
                   </>
                 );
               }
