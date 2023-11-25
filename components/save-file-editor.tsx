@@ -183,7 +183,7 @@ export function SaveFileEditor({
                   />
                   {key === "CurrentPlanetID" && (
                     <div className="text-sm mb-4 text-[grey]">
-                      0 - Experimentation, 1 - Assurance, 2 - Vow, 3 - Company,
+                      0 - Experimentation, 1 - Assurance, 2 - Vow, 3 - Company
                       Building, 4 - March, 5 - Rend, 6 - Dine, 7 - Offense, 8 -
                       Titan
                     </div>
