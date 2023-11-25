@@ -163,23 +163,32 @@ export function SaveFileEditor({
           switch (type) {
             case "int":
               return (
-                <input
-                  name={key}
-                  type="number"
-                  className="text-black mb-2"
-                  value={value as number}
-                  onChange={(e) => {
-                    setSave((save: any) => {
-                      return {
-                        ...save,
-                        [key]: {
-                          ...save[key],
-                          value: parseInt(e.target.value) || 0,
-                        },
-                      };
-                    });
-                  }}
-                />
+                <div className="flex flex-col">
+                  <input
+                    name={key}
+                    type="number"
+                    className="text-black mb-2 w-fit"
+                    value={value as number}
+                    onChange={(e) => {
+                      setSave((save: any) => {
+                        return {
+                          ...save,
+                          [key]: {
+                            ...save[key],
+                            value: parseInt(e.target.value) || 0,
+                          },
+                        };
+                      });
+                    }}
+                  />
+                  {key === "CurrentPlanetID" && (
+                    <div className="text-sm mb-4 text-[grey]">
+                      0 - Experimentation, 1 - Assurance, 2 - Vow, 3 - Company,
+                      Building, 4 - March, 5 - Rend, 6 - Dine, 7 - Offense, 8 -
+                      Titan
+                    </div>
+                  )}
+                </div>
               );
             case "System.Int32[],mscorlib":
               if (Array.isArray(value)) {
